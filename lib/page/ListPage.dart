@@ -11,6 +11,7 @@ class _ListPageState extends State<ListPage> {
 
   void _getData() {
     setState(() {
+
       wanList.getData();
     });
   }
