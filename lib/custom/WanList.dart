@@ -14,10 +14,15 @@ class WanList extends StatefulWidget {
   _WanListState createState() => wanState;
 }
 
+bool isPerformingRequest = false;
+
 class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  List<BingInfo> bingList = new List();
+  List<NewsInfo> bingList = new List();
   ListDataFactory dataFactory;
+  bool isLoadingMore = false;
+
+  ScrollController scrollController = ScrollController();
 
   void getData() {
     dataFactory.getData();
@@ -26,10 +31,30 @@ class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
+    super.initState();
     dataFactory = new ListDataFactory(bingList, () {
       setState(() {});
+      this.isLoadingMore = false;
+      isPerformingRequest = false;
     });
-    super.initState();
+
+    /// 判断是否需要上拉加载
+    this.scrollController.addListener(() {
+      if (!this.isLoadingMore &&
+          this.scrollController.position.pixels >=
+              this.scrollController.position.maxScrollExtent) {
+        this.loadMoreData();
+      }
+    });
+  }
+
+  /// 上拉加载
+  void loadMoreData() {
+    setState(() {
+      isPerformingRequest = true;
+      this.isLoadingMore = true;
+    });
+    getData();
   }
 
   @override
@@ -41,24 +66,32 @@ class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 8),
       child: ListView.separated(
+          controller: this.scrollController,
           itemBuilder: (BuildContext context, int index) {
-            return bingList[index];
+            if (index == bingList.length) {
+              return _buildProgressIndicator();
+            } else {
+              return bingList[index];
+            }
           },
           separatorBuilder: (BuildContext context, int index) {
-            return new Container(height: 4.0, color: Colors.white);
+            return new Container(height: 8.0, color: Colors.transparent);
           },
-          itemCount: bingList.length),
+          itemCount: bingList.length + 1),
     );
   }
 }
 
 class ListDataFactory {
-  List<BingInfo> bingList;
+  List<NewsInfo> bingList;
   int page = 1;
   VoidCallback callRefresh;
 
-  ListDataFactory(this.bingList, this.callRefresh);
+  ListDataFactory(this.bingList, this.callRefresh) {
+    getData();
+  }
 
   void getData() {
     getArticle((wan) {
@@ -70,9 +103,55 @@ class ListDataFactory {
     if (page == 1) bingList.clear();
     page++;
     for (Article article in articleList) {
-      BingInfo info = BingInfo(article.envelopePic, article.niceDate);
+      NewsInfo info = NewsInfo(
+          article.envelopePic, article.desc, article.author, article.niceDate);
       bingList.add(info);
+      print(article.toString());
     }
     callRefresh();
   }
+}
+
+Widget _buildProgressIndicator() {
+  return new Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Center(
+      child: Opacity(
+        opacity: isPerformingRequest ? 1.0 : 0.0,
+        child: CircularProgressIndicator(
+          valueColor: LoadingStyleColor(),
+        ),
+      ),
+    ),
+  );
+}
+
+class LoadingStyleColor extends Animation<Color> {
+  @override
+  void addListener(listener) {
+    // TODO: implement addListener
+  }
+
+  @override
+  void addStatusListener(listener) {
+    // TODO: implement addStatusListener
+  }
+
+  @override
+  void removeListener(listener) {
+    // TODO: implement removeListener
+  }
+
+  @override
+  void removeStatusListener(listener) {
+    // TODO: implement removeStatusListener
+  }
+
+  @override
+  // TODO: implement status
+  AnimationStatus get status => null;
+
+  @override
+  // TODO: implement value
+  Color get value => Colors.grey;
 }

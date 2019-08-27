@@ -43,3 +43,98 @@ class BingInfo extends StatelessWidget {
     );
   }
 }
+
+class NewsInfo extends StatelessWidget {
+  final String imagePath;
+  final String desc;
+  final String data;
+  final String author;
+
+  final EdgeInsetsGeometry margin;
+
+  NewsInfo(this.imagePath, this.desc, this.author, this.data, {this.margin});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      height: 220,
+      width: double.infinity,
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.all(4),
+          child: Flex(
+            direction: Axis.horizontal,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      top: 4.0,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: double.infinity,maxHeight: 100),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            desc,
+                            softWrap: true,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 14.0,),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 4.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            data,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 18.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 4.0,
+                      right: 4.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: Text(
+                            author,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 18.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Image.network(
+                    imagePath,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
