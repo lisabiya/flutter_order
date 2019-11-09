@@ -43,6 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           GestureDetector(
               onTap: () {
+                Router.goPage(context, Router.button);
+              },
+              child: Container(
+                padding: EdgeInsets.only(right: 16),
+                child: Icon(Icons.home),
+              )),
+          GestureDetector(
+              onTap: () {
                 Router.goPage(context, Router.list);
               },
               child: Container(
