@@ -57,6 +57,17 @@ class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
     getData();
   }
 
+  /// 模拟下拉刷新
+  Future<void> _onRefresh() async {
+    if (isLoadingMore) {
+      return;
+    }
+    setState(() {
+      isLoadingMore = true;
+    });
+    dataFactory.refreshData();
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -65,22 +76,25 @@ class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 8),
-      child: ListView.separated(
-          controller: this.scrollController,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == bingList.length) {
-              return _buildProgressIndicator();
-            } else {
-              return bingList[index];
-            }
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return new Container(height: 8.0, color: Colors.transparent);
-          },
-          itemCount: bingList.length + 1),
-    );
+    return RefreshIndicator(
+        color: Colors.red[400],
+        child: Container(
+          margin: EdgeInsets.only(top: 8),
+          child: ListView.separated(
+              controller: this.scrollController,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == bingList.length) {
+                  return _buildProgressIndicator();
+                } else {
+                  return bingList[index];
+                }
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return new Container(height: 8.0, color: Colors.transparent);
+              },
+              itemCount: bingList.length + 1),
+        ),
+        onRefresh: _onRefresh);
   }
 }
 
@@ -89,8 +103,19 @@ class ListDataFactory {
   int page = 1;
   VoidCallback callRefresh;
 
+  int getPage() {
+    return page;
+  }
+
   ListDataFactory(this.bingList, this.callRefresh) {
     getData();
+  }
+
+  void refreshData() {
+    page = 1;
+    getArticle((wan) {
+      initWan(wan.data.datas);
+    }, page);
   }
 
   void getData() {

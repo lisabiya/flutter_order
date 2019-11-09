@@ -11,7 +11,6 @@ class _ListPageState extends State<ListPage> {
 
   void _getData() {
     setState(() {
-
       wanList.getData();
     });
   }
@@ -24,11 +23,11 @@ class _ListPageState extends State<ListPage> {
         title: Text("列表页"),
       ),
       body: wanList,
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getData,
-        tooltip: '增加',
-        child: Icon(Icons.add),
-      ),
+//      floatingActionButton: FloatingActionButton(
+//        onPressed: _getData,
+//        tooltip: '增加',
+//        child: Icon(Icons.add),
+//      ),
     );
   }
 }
