@@ -102,6 +102,7 @@ class ListDataFactory {
   List<NewsInfo> bingList;
   int page = 1;
   VoidCallback callRefresh;
+  OnHttpCallBack<Wan> callBack;
 
   int getPage() {
     return page;
@@ -109,19 +110,18 @@ class ListDataFactory {
 
   ListDataFactory(this.bingList, this.callRefresh) {
     getData();
+    callBack = (wan) {
+      initWan(wan.data.datas);
+    };
   }
 
   void refreshData() {
     page = 1;
-    getArticle((wan) {
-      initWan(wan.data.datas);
-    }, page);
+    Future s = getArticle(callBack, page);
   }
 
   void getData() {
-    getArticle((wan) {
-      initWan(wan.data.datas);
-    }, page);
+    Future<Wan> s = getArticle(callBack, page);
   }
 
   void initWan(List<Article> articleList) {

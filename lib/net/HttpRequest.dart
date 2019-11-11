@@ -8,7 +8,9 @@ BaseOptions options = BaseOptions(
   receiveTimeout: 3000,
 );
 
-typedef OnHttpCallBack<T>(T message);
+//typedef OnHttpCallBack<T>(T message);
+
+typedef OnHttpCallBack<T> = Function(T message);
 
 getHappy(OnHttpCallBack<Ganho> onMessage, int page) async {
   var dio = Dio();
@@ -36,6 +38,7 @@ getArticle(OnHttpCallBack<Wan> onMessage, int page) async {
       Wan ganHo = Wan.fromJson(response.data);
       print(ganHo.data.curPage);
       onMessage(ganHo);
+      return ganHo;
     }
   } catch (e) {
     print("responsesss" + e.toString());
