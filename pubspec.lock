@@ -88,6 +88,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_webview_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_webview_plugin
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.9+1"
   image:
     dependency: transitive
     description:
@@ -123,6 +130,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.0+1"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0"
   petitparser:
     dependency: transitive
     description:
@@ -184,6 +198,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.5"
+  toast:
+    dependency: "direct main"
+    description:
+      name: toast
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.5"
   typed_data:
     dependency: transitive
     description:

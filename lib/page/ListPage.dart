@@ -20,14 +20,14 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("列表页"),
+        title: Text("玩安卓列表"),
       ),
       body: wanList,
-//      floatingActionButton: FloatingActionButton(
-//        onPressed: _getData,
-//        tooltip: '增加',
-//        child: Icon(Icons.add),
-//      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getData,
+        tooltip: '增加',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

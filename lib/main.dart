@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_order/custom/CustomView.dart';
 import 'package:flutter_order/route/Router.dart';
+import 'package:flutter_order/widge/ItemButton.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,6 +37,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void res() async {
+    PermissionStatus permission =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.phone);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,40 +50,31 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[
           GestureDetector(
               onTap: () {
-                Router.goPage(context, Router.button);
+                Router.goPage(context, Router.list);
               },
               child: Container(
                 padding: EdgeInsets.only(right: 16),
                 child: Icon(Icons.home),
               )),
-          GestureDetector(
-              onTap: () {
-                Router.goPage(context, Router.list);
-              },
-              child: Container(
-                padding: EdgeInsets.only(right: 16),
-                child: Icon(Icons.format_list_bulleted),
-              ))
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          BingInfo(
-            "https://images.gitee.com/uploads/images/2018/0724/182940_64b567bc_1841643.jpeg",
-            "夏目友人帐",
-            margin: EdgeInsets.all(8),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              ItemButton("玩安卓", () {
+                Router.goPage(context, Router.list);
+              }),
+              ItemButton("DropDown Button", () {
+                Router.goPage(context, Router.button);
+              }),
+              ItemButton("火标网", () {
+                Router.goPage(context, Router.web);
+              })
+            ],
           ),
-          Container(
-            margin: EdgeInsets.all(8),
-            child: Text(
-              '点击数字变化:',
-            ),
-          ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.display1,
-          ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,

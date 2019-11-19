@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_order/route/Router.dart';
+import 'package:toast/toast.dart';
 
 class BingInfo extends StatelessWidget {
   final imagePath;
@@ -49,92 +51,115 @@ class NewsInfo extends StatelessWidget {
   final String desc;
   final String data;
   final String author;
+  final String url;
+  var map = Map<String, String>();
 
   final EdgeInsetsGeometry margin;
 
-  NewsInfo(this.imagePath, this.desc, this.author, this.data, {this.margin});
+  NewsInfo(this.imagePath, this.desc, this.author, this.data, this.url,
+      {this.margin}) {
+    map["url"] = url;
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      height: 220,
-      width: double.infinity,
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.all(4),
-          child: Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Stack(
+        height: 220,
+        width: double.infinity,
+        child: Card(
+          child: Container(
+              padding: EdgeInsets.all(4),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Router.goPage(context, Router.web, map: map);
+                },
+                child: Flex(
+                  direction: Axis.horizontal,
                   children: <Widget>[
-                    Positioned(
-                      top: 4.0,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: double.infinity,maxHeight: 100),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            desc,
-                            softWrap: true,
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 14.0,),
+                    Flexible(
+                      flex: 2,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            left: 4,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  maxWidth: double.infinity, maxHeight: 140),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Text(
+                                  desc,
+                                  textDirection: TextDirection.ltr,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: Colors.yellow[800],
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Positioned(
+                            bottom: 4.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Text(
+                                  data,
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 4.0,
+                            right: 4.0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Text(
+                                  author,
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 14,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      bottom: 4.0,
+                    Flexible(
+                      flex: 1,
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            data,
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 18.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 4.0,
-                      right: 4.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            author,
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 18.0),
-                          ),
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(8),
+                        child: Image.network(
+                          imagePath,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  child: Image.network(
-                    imagePath,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              )),
+        ));
   }
 }

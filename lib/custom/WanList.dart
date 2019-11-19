@@ -37,6 +37,7 @@ class _WanListState extends State<WanList> with SingleTickerProviderStateMixin {
       this.isLoadingMore = false;
       isPerformingRequest = false;
     });
+    dataFactory.refreshData();
 
     /// 判断是否需要上拉加载
     this.scrollController.addListener(() {
@@ -102,7 +103,6 @@ class ListDataFactory {
   List<NewsInfo> bingList;
   int page = 1;
   VoidCallback callRefresh;
-  OnHttpCallBack<Wan> callBack;
 
   int getPage() {
     return page;
@@ -110,18 +110,23 @@ class ListDataFactory {
 
   ListDataFactory(this.bingList, this.callRefresh) {
     getData();
-    callBack = (wan) {
-      initWan(wan.data.datas);
-    };
   }
 
   void refreshData() {
     page = 1;
-    Future s = getArticle(callBack, page);
+    getArticle(page).then((wan) {
+      initWan(wan.data.datas);
+    }, onError: (message) {
+      print(message);
+    });
   }
 
   void getData() {
-    Future<Wan> s = getArticle(callBack, page);
+    getArticle(page).then((wan) {
+      initWan(wan.data.datas);
+    }, onError: (message) {
+      print(message);
+    });
   }
 
   void initWan(List<Article> articleList) {
@@ -129,7 +134,7 @@ class ListDataFactory {
     page++;
     for (Article article in articleList) {
       NewsInfo info = NewsInfo(
-          article.envelopePic, article.desc, article.author, article.niceDate);
+          article.envelopePic, article.desc, article.author, article.niceDate,article.link);
       bingList.add(info);
       print(article.toString());
     }

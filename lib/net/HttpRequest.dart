@@ -27,7 +27,7 @@ getHappy(OnHttpCallBack<Ganho> onMessage, int page) async {
   }
 }
 
-getArticle(OnHttpCallBack<Wan> onMessage, int page) async {
+Future<Wan> getArticle(int page) async {
   var dio = Dio();
   try {
     Response response =
@@ -37,10 +37,11 @@ getArticle(OnHttpCallBack<Wan> onMessage, int page) async {
     if (errorCode == 0) {
       Wan ganHo = Wan.fromJson(response.data);
       print(ganHo.data.curPage);
-      onMessage(ganHo);
-      return ganHo;
+      return Future.value(ganHo);
+    } else {
+      return Future.error(response.data['errorMessage']);
     }
   } catch (e) {
-    print("responsesss" + e.toString());
+    return Future.error(e.toString());
   }
 }

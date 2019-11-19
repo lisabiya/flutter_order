@@ -64,7 +64,7 @@ class _DropButtonState extends State<DropButton> {
               children: <Widget>[
                 Image.network(
                   "https://images.gitee.com/uploads/images/2018/0724/182940_64b567bc_1841643.jpeg",
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
